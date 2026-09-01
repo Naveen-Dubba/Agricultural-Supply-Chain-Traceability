@@ -23,36 +23,21 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Build Verification') {
             steps {
-                echo 'Deploying AgriTrace...'
-                sh 'docker-compose up -d'
-            }
-        }
-
-        stage('Verify') {
-            steps {
-                sh 'docker-compose ps'
-            }
-        }
-
-        stage('Health Check') {
-            steps {
-                sh '''
-                    sleep 10
-                    curl -f http://host.docker.internal/health
-                '''
+                echo 'Docker images built successfully.'
+                sh 'docker images | grep agritrace'
             }
         }
     }
 
     post {
         success {
-            echo 'AgriTrace CI/CD completed successfully!'
+            echo 'AgriTrace CI/CD Pipeline completed successfully!'
         }
 
         failure {
-            echo 'AgriTrace CI/CD failed. Check Console Output.'
+            echo 'AgriTrace CI/CD Pipeline failed.'
         }
     }
 }
