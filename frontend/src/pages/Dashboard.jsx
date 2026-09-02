@@ -1,41 +1,210 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { dashboardService } from '../services/apiService';
-import { Users, Package, Truck, Warehouse, Building2, Store, ArrowUpRight, Activity, ShieldCheck } from 'lucide-react';
+import React from 'react';
+import {
+  Users,
+  Sprout,
+  Package,
+  MapPin,
+  Warehouse,
+  Truck,
+  Search,
+  RefreshCcw
+} from 'lucide-react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
+
+import './Dashboard.css';
+
+const COLORS = ['#43b654', '#ffb52e', '#9ca3af', '#ef4444'];
+
+const activityData = [
+  { name: 'Completed', value: 38 },
+  { name: 'Overdue', value: 28 },
+  { name: 'Planned', value: 22 },
+  { name: 'Cancelled', value: 12 }
+];
+
+const deviationData = [
+  { name: 'On Schedule', value: 78 },
+  { name: 'Deviation', value: 22 }
+];
+
+const cropData = [
+  { name: 'Rice', value: 28 },
+  { name: 'Tomato', value: 22 },
+  { name: 'Mango', value: 10 },
+  { name: 'Chilli', value: 45 },
+  { name: 'Others', value: 25 }
+];
 
 const Dashboard = () => {
-  const [stats, setStats] = useState(null);
-  const [categoryData, setCategoryData] = useState([]);
-  const [qualityData, setQualityData] = useState([]);
-  const [shipmentData, setShipmentData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  return (
+    <div className="dashboard">
 
-  useEffect(() => { fetchDashboardData(); }, []);
-  const fetchDashboardData = async () => {
-    try {
-      const [statsRes, categoryRes, qualityRes, shipmentRes] = await Promise.all([
-        dashboardService.getStats(), dashboardService.getProduceByCategory(), dashboardService.getQualityGrades(), dashboardService.getShipmentStats(),
-      ]);
-      setStats(statsRes.data); setCategoryData(categoryRes.data); setQualityData(qualityRes.data); setShipmentData(shipmentRes.data);
-    } catch (error) { console.error('Error fetching dashboard data:', error); }
-    finally { setLoading(false); }
-  };
-  if (loading) return <div className="container"><div className="dashboard-loading"><span></span><p>Preparing your supply chain overview...</p></div></div>;
+      <div className="dashboard-header">
+        <div>
+          <h1>Welcome back!</h1>
+          <p>AgriTrace Supply Chain Monitoring Dashboard</p>
+        </div>
 
-  const cards = [
-    ['Total Farmers', stats?.total_farmers || 0, Users, 'Registered network'],
-    ['Produce Batches', stats?.total_batches || 0, Package, 'Traceable inventory'],
-    ['Active Shipments', stats?.active_shipments || 0, Truck, 'Currently in transit'],
-    ['Warehouses', stats?.total_warehouses || 0, Warehouse, 'Storage locations'],
-    ['Distributors', stats?.total_distributors || 0, Building2, 'Distribution partners'],
-    ['Retailers', stats?.total_retailers || 0, Store, 'Retail endpoints'],
-  ];
-  const chartCard = (title, subtitle, data, dataKey, fill) => <section className="dash-panel"><div className="panel-heading"><div><h3>{title}</h3><p>{subtitle}</p></div><button className="panel-action"><ArrowUpRight size={16}/></button></div><ResponsiveContainer width="100%" height={260}><BarChart data={data} barSize={28}><CartesianGrid stroke="#edf1ef" vertical={false}/><XAxis dataKey={dataKey} axisLine={false} tickLine={false} tick={{fontSize:11,fill:'#73837b'}}/><YAxis axisLine={false} tickLine={false} tick={{fontSize:11,fill:'#73837b'}}/><Tooltip cursor={{fill:'#f5f8f6'}} contentStyle={{border:'1px solid #e3eae6',borderRadius:'10px',boxShadow:'0 8px 25px rgba(0,0,0,.07)'}}/><Bar dataKey="count" fill={fill} radius={[6,6,2,2]}/></BarChart></ResponsiveContainer></section>;
+        <div className="year-box">
+          <label>Select Year</label>
+          <select>
+            <option>2026-27</option>
+            <option>2025-26</option>
+            <option>2024-25</option>
+          </select>
+        </div>
+      </div>
 
-  return <div className="container dashboard-page">
-    <div className="dashboard-hero"><div><div className="eyebrow"><Activity size={14}/> LIVE OPERATIONS</div><h1>Supply Chain Overview</h1><p>Monitor produce movement, quality, storage and distribution from one workspace.</p></div><div className="health-pill"><span></span><div><strong>Network healthy</strong><small>All services operational</small></div><ShieldCheck size={20}/></div></div>
-    <div className="dashboard-stats">{cards.map(([label,value,Icon,note],i)=><div className="metric-card" key={label}><div className={`metric-icon metric-${i}`}><Icon size={20}/></div><div className="metric-top"><span>{label}</span><ArrowUpRight size={15}/></div><strong>{value}</strong><small>{note}</small></div>)}</div>
-    <div className="dashboard-charts">{chartCard('Produce by Category','Batch distribution across produce categories',categoryData,'category','#16834a')}{chartCard('Quality Grades','Inspection outcomes across graded produce',qualityData,'grade','#2563eb')}{chartCard('Shipment Status','Current logistics pipeline status',shipmentData,'status','#d97706')}</div>
-  </div>;
+      <div className="summary-row">
+
+        <div className="summary-item">
+          <Users size={20} />
+          <span>Farmers</span>
+          <strong>248</strong>
+        </div>
+
+        <div className="summary-item">
+          <Sprout size={20} />
+          <span>Crops</span>
+          <strong>34</strong>
+        </div>
+
+        <div className="summary-item">
+          <Package size={20} />
+          <span>Produce</span>
+          <strong>524</strong>
+        </div>
+
+        <div className="summary-item">
+          <MapPin size={20} />
+          <span>Mapped Area</span>
+          <strong>88.37 Ha</strong>
+        </div>
+
+        <div className="summary-item">
+          <Warehouse size={20} />
+          <span>Warehouses</span>
+          <strong>18</strong>
+        </div>
+
+        <div className="summary-item">
+          <Truck size={20} />
+          <span>Shipments</span>
+          <strong>37</strong>
+        </div>
+
+      </div>
+
+      <div className="chart-row">
+
+        <div className="dashboard-card">
+          <h3>Activity Progress</h3>
+
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={activityData}
+                dataKey="value"
+                innerRadius={42}
+                outerRadius={65}
+              >
+                {activityData.map((entry, index) => (
+                  <Cell
+                    key={entry.name}
+                    fill={COLORS[index]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="dashboard-card">
+          <h3>Supply Chain Status</h3>
+
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={deviationData}
+                dataKey="value"
+                innerRadius={42}
+                outerRadius={65}
+              >
+                <Cell fill="#43b654" />
+                <Cell fill="#ffb52e" />
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="dashboard-card">
+          <h3>Total Crops (%)</h3>
+
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={cropData}>
+              <XAxis dataKey="name" hide />
+              <YAxis hide />
+              <Tooltip />
+              <Bar dataKey="value" fill="#43b654" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+      </div>
+
+      <div className="monitor-card">
+
+        <div className="monitor-header">
+          <div>
+            <h2>Supply Chain Monitoring</h2>
+            <p>Live produce movement and farm activity</p>
+          </div>
+
+          <div className="monitor-actions">
+            <button>
+              <Search size={18} />
+            </button>
+
+            <button>
+              <RefreshCcw size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="map-placeholder">
+
+          <div className="map-content">
+            <h2>AgriTrace Network Map</h2>
+            <p>
+              Farm, warehouse and shipment locations will appear here.
+            </p>
+
+            <div className="map-points">
+              <span>📍 Farm 01</span>
+              <span>📍 Warehouse</span>
+              <span>📍 Distributor</span>
+              <span>📍 Retailer</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 };
+
 export default Dashboard;

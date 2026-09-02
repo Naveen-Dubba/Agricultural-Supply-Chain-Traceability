@@ -1,0 +1,46 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  min-height: 300px;
+}
+
+.empty-state-icon {
+  color: #d1d5db;
+  margin-bottom: 20px;
+}
+
+.empty-state-message {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 20px 0;
+  max-width: 400px;
+}
+
+.empty-state-button {
+  padding: 10px 20px;
+  background-color: #43b654;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.empty-state-button:hover {
+  background-color: #36942c;
+}
+
+.empty-state-button:active {
+  transform: scale(0.98);
+}

@@ -26,7 +26,7 @@ const generateNotificationId = () => {
 
 // Generate QR code data for a produce batch
 const generateQRCode = (batchId) => {
-  return `http://localhost:5173/trace/${batchId}`;
+  return `http://localhost:3000/traceability?batch=${batchId}`;
 };
 
 export {
