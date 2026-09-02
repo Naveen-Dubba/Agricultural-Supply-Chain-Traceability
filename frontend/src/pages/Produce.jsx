@@ -27,7 +27,7 @@ const batches = [
     quantity: '300.00 kg',
     harvestDate: '8/20/2026',
     stage: 'Distributor',
-    location: 'Guntur',
+    location: 'palnadu',
     status: 'Processing'
   },
   {
